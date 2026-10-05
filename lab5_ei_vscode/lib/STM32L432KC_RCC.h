@@ -1,8 +1,8 @@
-// STM32L432KC_FLASH.h
-// Header for FLASH functions
+// STM32F401RE_RCC.h
+// Header for RCC functions
 
-#ifndef STM32L4_FLASH_H
-#define STM32L4_FLASH_H
+#ifndef STM32L4_RCC_H
+#define STM32L4_RCC_H
 
 #include <stdint.h>
 #include <stm32l432xx.h>
@@ -11,6 +11,7 @@
 // Function prototypes
 ///////////////////////////////////////////////////////////////////////////////
 
-void configureFlash();
+void configurePLL(void);
+void configureClock(void);
 
 #endif

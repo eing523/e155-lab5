@@ -9,9 +9,9 @@
 #include "stm32l432xx.h"
 
 // global vars
-voltatile int direction;
-voltatile int pulse;
-voltatile float velocity;
+volatile int direction;
+volatile int pulse;
+volatile float velocity;
 
 // two stationary digital sensors
 int state_a;
@@ -68,7 +68,7 @@ int main(void) {
     __enable_irq();
     // from PM; NVIC priority interrupts (p.218)
     __NVIC_EnableIRQ(EXTI9_5_IRQn);
-    __NVIC_SetPriority(TIM1_BRK_TIM2_IRQn, 1);  // give timer priority
+    __NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, 1);  // give timer priority
     __NVIC_SetPriority(EXTI9_5_IRQn, 2);
 
     while(1){
@@ -76,7 +76,7 @@ int main(void) {
         // find angular velocity in rps
         velocity = ((float)pulse)/(4*408.0f); // PPR (pulse per rotation) = 408. We have 4 edges per physical pulse, so multiply 408 by 4.
         
-        printf("Angular velocity: %d!\n", velocity);
+        printf("Angular velocity: %f!\n", velocity);
         printf("Direction: %d!\n", direction);
 
         // update interrupt flag - status register
