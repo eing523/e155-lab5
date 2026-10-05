@@ -13,7 +13,6 @@ voltatile int direction;
 voltatile int pulse;
 voltatile float velocity;
 
-
 // two stationary digital sensors
 int state_a;
 int state_b;
@@ -67,9 +66,9 @@ int main(void) {
 
      // Enable interrupts globally
     __enable_irq();
-    // from PM; NVIC priority interrupts -- REVIEW IN MORNING LOL -- TO UNDERSTAND
+    // from PM; NVIC priority interrupts (p.218)
     __NVIC_EnableIRQ(EXTI9_5_IRQn);
-    __NVIC_SetPriority(TIM1_BRK_TIM2_IRQn, 1);  // give print timer priority
+    __NVIC_SetPriority(TIM1_BRK_TIM2_IRQn, 1);  // give timer priority
     __NVIC_SetPriority(EXTI9_5_IRQn, 2);
 
     while(1){
