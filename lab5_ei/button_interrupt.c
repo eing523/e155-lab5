@@ -39,8 +39,8 @@ int main(void) {
     // there's like 2 extra line here that hh did but dont think it does anhything? if code no work add it
 
     // Initialize timer
-    //RCC->APB1ENR1 |= (1 << 0); // TIM2EN -- I dont think i have to update this to tim15. if code dont work, change to tim 15 and see.
-    RCC->APB2ENR |= (0b01 << 16);
+    RCC->APB1ENR1 |= (1 << 0); // TIM2EN -- I dont think i have to update this to tim15. if code dont work, change to tim 15 and see.
+    //RCC->APB2ENR |= (0b01 << 16);
     initTIM(TIMER, 10000); // 10,000 since PSC = 7,999, CLK = 80 MHz
 
     // 1. Enable SYSCFG clock domain in RCC
@@ -70,7 +70,7 @@ int main(void) {
     __enable_irq();
     // from PM; NVIC priority interrupts (p.218)
     __NVIC_EnableIRQ(EXTI9_5_IRQn);
-    __NVIC_SetPriority(TIM1_BRK_TIM15_IRQn, 1);  // give timer priority
+    __NVIC_SetPriority(TIM2_IRQn, 1);  // give timer priority
     __NVIC_SetPriority(EXTI9_5_IRQn, 2);
 
     while(1){
@@ -78,8 +78,8 @@ int main(void) {
         // find angular velocity in rps
         velocity = ((float)pulse)/(4*408.0f); // PPR (pulse per rotation) = 408. We have 4 edges per physical pulse, so multiply 408 by 4.
         
-        printf("Angular velocity: %f!\n", velocity);
-        printf("Direction: %d!\n", direction);
+        printf("Angular velocity: %f\n", velocity);
+        printf("Direction: %d\n", direction);
 
         // update interrupt flag - status register
         TIMER->SR &= ~(1<<0);
