@@ -1,7 +1,7 @@
 // main.h
-// Josh Brake
-// jbrake@hmc.edu
-// 10/31/22
+// Emily Ing
+// eing@hmc.edu
+// 10/5/2026
 
 #ifndef MAIN_H
 #define MAIN_H
@@ -16,7 +16,7 @@
 #define LED_PIN PB3
 #define BUTTON_PIN PA7
 //#define DELAY_TIM TIM2
-#define TIMER TIM15
+#define TIMER TIM2
 
 // sensors
 #define A_PIN PA6 
@@ -25,6 +25,5 @@
 // values for variables
 #define CW 0
 #define CCW 1
-#define PPR 408
 
 #endif // MAIN_H

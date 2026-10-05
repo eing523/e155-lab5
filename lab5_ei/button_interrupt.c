@@ -1,7 +1,7 @@
 // button_interrupt.c
-// Josh Brake
-// jbrake@hmc.edu
-// 10/31/22
+// Emily Ing
+// eing@hmc.edu
+// 10/5/2026
 
 #include "main.h"
 // Necessary includes for printf to work
@@ -33,14 +33,13 @@ int main(void) {
     gpioEnable(GPIO_PORT_A);
     pinMode(A_PIN, GPIO_INPUT);
     pinMode(B_PIN, GPIO_INPUT);
+    
 
     GPIOA->PUPDR |= (0b01 << 2*gpioPinOffset(A_PIN)); // Set PA6 as pull-up (PUPD6 = 01)
     GPIOA->PUPDR |= (0b01 << 2*gpioPinOffset(B_PIN)); // Set PA9 as pull-up (PUPD9 = 01)
-    // there's like 2 extra line here that hh did but dont think it does anhything? if code no work add it
 
     // Initialize timer
-    RCC->APB1ENR1 |= (1 << 0); // TIM2EN -- I dont think i have to update this to tim15. if code dont work, change to tim 15 and see.
-    //RCC->APB2ENR |= (0b01 << 16);
+    RCC->APB1ENR1 |= (1 << 0); // TIM2EN
     initTIM(TIMER, 10000); // 10,000 since PSC = 7,999, CLK = 80 MHz
 
     // 1. Enable SYSCFG clock domain in RCC
@@ -68,7 +67,7 @@ int main(void) {
 
      // Enable interrupts globally
     __enable_irq();
-    // from PM; NVIC priority interrupts (p.218)
+    // from PM; NVIC priority interrupts (p.218), and the parameters are from the RM vector table
     __NVIC_EnableIRQ(EXTI9_5_IRQn);
     __NVIC_SetPriority(TIM2_IRQn, 1);  // give timer priority
     __NVIC_SetPriority(EXTI9_5_IRQn, 2);
@@ -78,7 +77,7 @@ int main(void) {
         // find angular velocity in rps
         velocity = ((float)pulse)/(4*408.0f); // PPR (pulse per rotation) = 408. We have 4 edges per physical pulse, so multiply 408 by 4.
         
-        printf("Angular velocity: %f\n", velocity);
+        printf("Angular velocity in rev/s: %f\n", velocity);
         printf("Direction: %d\n", direction);
 
         // update interrupt flag - status register
@@ -101,15 +100,16 @@ void EXTI9_5_IRQHandler(void){
         state_a = digitalRead(A_PIN);
         state_b = digitalRead(B_PIN);
         pulse++;
-
-        if (state_a == 1) {
-            if (state_b == 0) {
-                direction = CCW;
-            } else {
+        
+        
+        if (state_b == 0) {
+            if (state_a == 1) {
                 direction = CW;
+            } else {
+                direction = CCW;
             }
         } else {
-            if (state_b == 0) {
+            if (state_a == 1) {
                 direction = CCW;
             } else {
                 direction = CW;
@@ -126,17 +126,17 @@ void EXTI9_5_IRQHandler(void){
         state_b = digitalRead(B_PIN);
         pulse++;
 
-        if (state_a == 1) {
-            if (state_b == 0) {
+        if (state_a == 0) {
+            if (state_b == 1) {
                 direction = CCW;
             } else {
                 direction = CW;
             }
         } else {
-            if (state_b == 0) {
-                direction = CCW;
-            } else {
+            if (state_b == 1) {
                 direction = CW;
+            } else {
+                direction = CCW;
             }
         }
     }
