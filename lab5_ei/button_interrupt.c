@@ -28,7 +28,6 @@ int _write(int file, char *ptr, int len) {
 }
 
 int main(void) {
-    printf("hello\n");
     // Enable LED as output
     gpioEnable(GPIO_PORT_A);
     pinMode(A_PIN, GPIO_INPUT);
@@ -73,7 +72,7 @@ int main(void) {
     __NVIC_SetPriority(EXTI9_5_IRQn, 2);
 
     while(1){
-        if(TIMER->CNT == 10000){ // checking velocity and direction every 1 second
+        if(TIMER->CNT >= 10000){ // checking velocity and direction every 1 second
         // find angular velocity in rps
         velocity = ((float)pulse)/(4*408.0f); // PPR (pulse per rotation) = 408. We have 4 edges per physical pulse, so multiply 408 by 4.
         
